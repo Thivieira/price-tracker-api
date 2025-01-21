@@ -9,6 +9,9 @@ const envSchema = z.object({
   COINGECKO_API_KEY: z.string(),
   ACCESS_TOKEN_SECRET: z.string(),
   REFRESH_TOKEN_SECRET: z.string(),
+  TWILIO_ACCOUNT_SID: z.string(),
+  TWILIO_AUTH_TOKEN: z.string(),
+  TWILIO_PHONE_NUMBER: z.string(),
 })
 
 const _env = envSchema.safeParse(process.env)

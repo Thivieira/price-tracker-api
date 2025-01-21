@@ -32,6 +32,7 @@ model User {
   created_at     DateTime       @default(now())
   updated_at     DateTime       @updatedAt
   RefreshToken   RefreshToken[]
+  OTPVerification OTPVerification[]
 }
 
 enum Role {
@@ -64,4 +65,18 @@ model Cryptocurrency {
   athDate   DateTime
   atlPrice  Float
   atlDate   DateTime
+}
+
+model OTPVerification {
+  id        Int      @id @default(autoincrement())
+  userId    Int?     // Make userId optional
+  hashedOTP String
+  expiresAt DateTime
+  attempts  Int      @default(0)
+  phone     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User?    @relation(fields: [userId], references: [id]) // Make relation optional
+
+  @@index([userId])
 }

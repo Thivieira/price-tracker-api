@@ -26,6 +26,14 @@ export function createFakeUserRegisterInput(overrides = {}) {
 
 export const fakeUserRegisterInput = createFakeUserRegisterInput()
 
+export const fakeUserRegisterInputWithValidPhone = createFakeUserRegisterInput({
+  phone: '+15005550006'
+})
+
+export const fakeUserRegisterInputWithInvalidPhone = createFakeUserRegisterInput({
+  phone: '+15005550001'
+})
+
 export const fakeUserLoginInput = {
   withEmail: {
     username_or_email: fakeUserRegisterInput.email,

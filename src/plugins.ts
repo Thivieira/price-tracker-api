@@ -6,9 +6,16 @@ import { env } from './env'
 // import formbody from '@fastify/formbody'
 // import multipart from '@fastify/multipart'
 import swagger from '@fastify/swagger'
+import rateLimit from '@fastify/rate-limit'
 
 export default function registerPlugins(app: FastifyInstance) {
   app.register(cors)
+
+  app.register(rateLimit, {
+    max: 100,
+    timeWindow: '1 minute'
+  })
+
   app.register(fastifyJwt, {
     secret: env.ACCESS_TOKEN_SECRET,
     cookie: {

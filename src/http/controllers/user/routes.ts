@@ -9,13 +9,16 @@ import updatePassword from '@/http/controllers/user/profile/update-password'
 import updatePin from '@/http/controllers/user/profile/update-pin'
 import listUsers from './list-users'
 import getUser from './get-user'
+import { sendOTP } from './auth/otp'
+import { resendOTP } from './auth/otp'
 // import updateProfilePhoto from './profile/update-profile-photo'
 
 export async function userRoutes(app: FastifyInstance) {
   app.post('/auth/register', register)
   app.post('/auth/login', login)
   app.post('/auth/refresh', refresh)
-
+  app.post('/auth/otp', sendOTP)
+  app.post('/auth/otp/resend', resendOTP)
   app.post('/auth/logout', { onRequest: [app.authenticate] }, logout)
   app.get('/auth/me', { onRequest: [app.authenticate] }, getProfile)
   app.put('/user/profile', { onRequest: [app.authenticate] }, updateProfile)
