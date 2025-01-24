@@ -1,4 +1,4 @@
-import { Cryptocurrency } from '@prisma/client'
+import { Cryptocurrency, Prisma } from '@prisma/client'
 
 export interface CryptocurrencyRepository {
   findAll(params: Prisma.CryptocurrencyFindManyArgs): Promise<Cryptocurrency[]>
@@ -6,23 +6,23 @@ export interface CryptocurrencyRepository {
   create(data: {
     symbol: string
     name: string
-    marketCap: number
-    high24h: number
-    low24h: number
-    high7d: number
-    low7d: number
-    athPrice: number
-    athDate: Date
-    atlPrice: number
-    atlDate: Date
+    market_cap: number
+    high_24h: number
+    low_24h: number
+    high_7d: number
+    low_7d: number
+    ath_price: number
+    ath_date: Date
+    atl_price: number
+    atl_date: Date
   }): Promise<Cryptocurrency>
   findBySymbol(symbol: string): Promise<Cryptocurrency | null>
   update(id: number, data: {
-    marketCap: number
-    high24h: number
-    low24h: number
-    high7d: number
-    low7d: number
+    market_cap: number
+    high_24h: number
+    low_24h: number
+    high_7d: number
+    low_7d: number
   }): Promise<Cryptocurrency>
   delete(id: number): Promise<void>
 } 

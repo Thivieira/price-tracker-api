@@ -1,17 +1,22 @@
 import { prisma } from '@/lib/prisma'
 import { OTPVerification } from '@prisma/client'
 import { OTPVerificationRepository } from '@/repositories/otp-verification.repository'
-
 export class PrismaOTPVerificationRepository implements OTPVerificationRepository {
   async create(data: {
     userId?: number
     hashedOTP: string
-    expiresAt: Date
+    expiresAt: Date // Changed from expires_at to expiresAt for consistency
     attempts: number
     phone: string
   }): Promise<OTPVerification> {
     return await prisma.oTPVerification.create({
-      data
+      data: {
+        user_id: data.userId,
+        hashed_otp: data.hashedOTP,
+        expires_at: data.expiresAt,
+        attempts: data.attempts,
+        phone: data.phone
+      }
     })
   }
 

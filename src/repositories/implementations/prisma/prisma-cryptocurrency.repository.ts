@@ -12,17 +12,17 @@ export class PrismaCryptocurrencyRepository implements CryptocurrencyRepository 
       const validatedData: Prisma.CryptocurrencyCreateInput = {
         symbol: cryptocurrencyData.symbol!,
         name: cryptocurrencyData.name!,
-        marketCap: cryptocurrencyData.marketCap!,
-        high24h: cryptocurrencyData.high24h!,
-        low24h: cryptocurrencyData.low24h!,
-        high7d: cryptocurrencyData.high7d!,
-        low7d: cryptocurrencyData.low7d!,
-        athPrice: cryptocurrencyData.athPrice!,
-        athDate: cryptocurrencyData.athDate!,
-        atlPrice: cryptocurrencyData.atlPrice!,
-        atlDate: cryptocurrencyData.atlDate!,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        market_cap: cryptocurrencyData.market_cap!,
+        high_24h: cryptocurrencyData.high_24h!,
+        low_24h: cryptocurrencyData.low_24h!,
+        high_7d: cryptocurrencyData.high_7d!,
+        low_7d: cryptocurrencyData.low_7d!,
+        ath_price: cryptocurrencyData.ath_price!,
+        ath_date: cryptocurrencyData.ath_date!,
+        atl_price: cryptocurrencyData.atl_price!,
+        atl_date: cryptocurrencyData.atl_date!,
+        created_at: new Date(),
+        updated_at: new Date(),
       };
 
       return await prisma.cryptocurrency.create({
@@ -37,7 +37,7 @@ export class PrismaCryptocurrencyRepository implements CryptocurrencyRepository 
   async update(cryptocurrencyId: number, cryptocurrencyData: Partial<Cryptocurrency>): Promise<Cryptocurrency> {
     const updatedCryptocurrency = await prisma.cryptocurrency.update({
       where: { id: cryptocurrencyId },
-      data: { ...cryptocurrencyData, updatedAt: new Date() },
+      data: { ...cryptocurrencyData, updated_at: new Date() },
     });
     return updatedCryptocurrency;
   }
