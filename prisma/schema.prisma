@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int            @id @default(autoincrement())
+  phone          String         @unique
+  email          String         @unique
+  username       String         @unique
+  password       String
+  hashed_pin     String // 4 digit pin hashed with bcrypt
+  role           Role           @default(CUSTOMER)
+  first_name     String
+  last_name      String
+  birthdate      String
+  street_address String // contains street number also
+  unit_number    String?
+  city           String
+  region         String
+  zip_code       String
+  created_at     DateTime       @default(now())
+  updated_at     DateTime       @updatedAt
+  deleted_at     DateTime?
+  RefreshToken   RefreshToken[]
+  OTPVerification OTPVerification[]
+}
+
+enum Role {
+  ADMIN
+  CUSTOMER
+}
+
+model RefreshToken {
+  id        Int       @id @default(autoincrement())
+  token     String    @unique
+  user_id    Int
+  user      User      @relation(fields: [user_id], references: [id])
+  expires_at DateTime
+  created_at DateTime  @default(now())
+  revoked_at DateTime?
+
+  @@index([user_id])
+}
+
+model Cryptocurrency {
+  id        Int      @id @default(autoincrement())
+  symbol    String   @unique
+  name      String
+  market_cap Float
+  high_24h   Float
+  low_24h    Float
+  high_7d    Float
+  low_7d     Float
+  ath_price  Float
+  ath_date   DateTime
+  atl_price  Float
+  atl_date   DateTime
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  deleted_at DateTime?
+}
+
+model OTPVerification {
+  id        Int      @id @default(autoincrement())
+  user_id    Int?     // Make userId optional
+  hashed_otp String
+  expires_at DateTime
+  attempts  Int      @default(0)
+  phone     String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  user      User?    @relation(fields: [user_id], references: [id]) // Make relation optional
+
+  @@index([user_id])
+}
