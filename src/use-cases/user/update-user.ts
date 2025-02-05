@@ -3,7 +3,7 @@ import { UserRepository } from '@/repositories/user.repository'
 import bcrypt from 'bcrypt'
 
 export class UpdateUserProfileUseCase {
-  constructor(private userRepository: UserRepository) {}
+  constructor(private userRepository: UserRepository) { }
 
   async execute(userId: number, data: UpdateProfileRequest) {
     const updatedData = {
@@ -22,5 +22,10 @@ export class UpdateUserProfileUseCase {
   async updatePassword(userId: number, password: string) {
     const hashedPassword = await bcrypt.hash(password, 10)
     return this.userRepository.updatePassword(userId, hashedPassword)
+  }
+
+  async setupPinVerification(userId: number) {
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+    return this.userRepository.updatePinExpiration(userId, expiresAt);
   }
 }

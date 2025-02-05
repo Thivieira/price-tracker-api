@@ -1,13 +1,20 @@
 import { z } from 'zod'
 
-export const createUserSchema = z.object({
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/
+
+const passwordSchema = z.string()
+  .min(8, 'Password must be at least 8 characters')
+  .max(100, 'Password must not exceed 100 characters')
+  .regex(PASSWORD_REGEX, 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character')
+
+const baseUserSchema = z.object({
   username: z.string(),
   first_name: z.string(),
   last_name: z.string(),
   email: z.string().email(),
   phone: z.string(),
-  password: z.string(),
-  password_confirmation: z.string(),
+  password: passwordSchema,
+  password_confirmation: passwordSchema,
   birthdate: z.string(),
   street_address: z.string(),
   unit_number: z.string().nullable(),
@@ -18,15 +25,25 @@ export const createUserSchema = z.object({
   raw_pin: z.string(),
 })
 
+export const createUserSchema = baseUserSchema.refine(
+  (data) => data.password === data.password_confirmation,
+  {
+    message: "Passwords don't match",
+    path: ["password_confirmation"],
+  }
+)
+
 export type CreateUserSchema = z.infer<typeof createUserSchema>
 
-export const createUserSchemaWithExtraFields = createUserSchema
-  .omit({ password_confirmation: true, raw_pin: true })
-  .extend({
-    hashed_pin: z.string(),
-    created_at: z.date(),
-    updated_at: z.date(),
-  })
+export const createUserSchemaWithExtraFields = z.object({
+  ...baseUserSchema.omit({
+    password_confirmation: true,
+    raw_pin: true,
+  }).shape,
+  hashed_pin: z.string(),
+  created_at: z.date(),
+  updated_at: z.date(),
+})
 
 export type CreateUserSchemaWithExtraFields = z.infer<typeof createUserSchemaWithExtraFields>
 

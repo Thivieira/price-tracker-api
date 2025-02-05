@@ -20,6 +20,7 @@ model User {
   username       String         @unique
   password       String
   hashed_pin     String // 4 digit pin hashed with bcrypt
+  pin_expires_at DateTime?
   role           Role           @default(CUSTOMER)
   first_name     String
   last_name      String

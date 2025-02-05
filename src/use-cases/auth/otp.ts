@@ -1,6 +1,5 @@
 import { OTPVerificationRepository } from '@/repositories/otp-verification.repository'
 import { OTPService } from '@/services/otp.service'
-import { UserRepository } from '@/repositories/user.repository'
 
 export class OTPUseCase {
   private readonly EXPIRY_MINUTES = 10
@@ -17,7 +16,7 @@ export class OTPUseCase {
 
     if (existingOTP) {
       const now = new Date()
-      const timeDiff = (now.getTime() - existingOTP.createdAt.getTime()) / (1000 * 60)
+      const timeDiff = (now.getTime() - existingOTP.created_at.getTime()) / (1000 * 60)
 
       if (timeDiff < this.COOLDOWN_MINUTES) {
         throw new Error(`Please wait ${Math.ceil(this.COOLDOWN_MINUTES - timeDiff)} minutes before requesting another OTP`)
@@ -52,7 +51,7 @@ export class OTPUseCase {
       throw new Error('Maximum verification attempts exceeded')
     }
 
-    const isValid = await this.otpService.verifyOTP(otp, otpRecord.hashedOTP)
+    const isValid = await this.otpService.verifyOTP(otp, otpRecord.hashed_otp)
 
     await this.otpVerificationRepository.incrementAttempts(otpRecord.id)
 

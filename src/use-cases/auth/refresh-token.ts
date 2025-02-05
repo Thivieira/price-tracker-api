@@ -10,7 +10,7 @@ interface RefreshTokenResponse {
 }
 
 export class RefreshTokenUseCase {
-  constructor(private refreshTokenRepository: RefreshTokenRepository) {}
+  constructor(private refreshTokenRepository: RefreshTokenRepository) { }
 
   async execute(token: string): Promise<RefreshTokenResponse> {
     const refreshToken = await this.refreshTokenRepository.findByToken(token)
@@ -19,23 +19,23 @@ export class RefreshTokenUseCase {
       throw new Error('Refresh token not found')
     }
 
-    if (refreshToken.revokedAt) {
+    if (refreshToken.revoked_at) {
       throw new Error('Refresh token has been revoked')
     }
 
-    if (dayjs(refreshToken.expiresAt).isBefore(dayjs())) {
+    if (dayjs(refreshToken.expires_at).isBefore(dayjs())) {
       throw new Error('Refresh token has expired')
     }
 
     await this.refreshTokenRepository.revokeToken(token)
 
     const accessToken = app.jwt.sign(
-      { sub: refreshToken.userId },
+      { sub: refreshToken.user_id },
       { key: env.ACCESS_TOKEN_SECRET, expiresIn: '15m' },
     )
 
     const newRefreshToken = await this.refreshTokenRepository.create({
-      userId: refreshToken.userId,
+      userId: refreshToken.user_id,
       expiresAt: dayjs().add(7, 'days').toDate(),
     })
 

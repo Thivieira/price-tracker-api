@@ -16,4 +16,5 @@ export interface UserRepository {
   deleteUser(userId: number): Promise<void>
   restoreUser(userId: number): Promise<void>
   permanentlyDeleteUser(userId: number): Promise<void>
+  updatePinExpiration(userId: number, expiresAt: Date | null): Promise<void>
 }
