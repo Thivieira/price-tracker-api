@@ -11,8 +11,7 @@ import updatePassword from '@/http/controllers/user/profile/update-password'
 import updatePin from '@/http/controllers/user/profile/update-pin'
 import listUsers from './list-users'
 import getUser from './get-user'
-import { sendOTP } from './auth/otp'
-import { resendOTP } from './auth/otp'
+import { sendOTP, resendOTP, verifyOTP } from './auth/otp'
 import updateUser from './update-user'
 import deleteUser from './delete-user'
 import restoreUser from './restore-user'
@@ -25,6 +24,7 @@ export async function userRoutes(app: FastifyInstance) {
   app.post('/auth/refresh', refresh)
   app.post('/auth/otp', sendOTP)
   app.post('/auth/otp/resend', resendOTP)
+  app.post('/auth/otp/verify', verifyOTP)
   app.post('/auth/logout', { onRequest: [app.authenticate] }, logout)
   app.get('/auth/me', { onRequest: [app.authenticate] }, getProfile)
   app.post('/auth/verify-pin', { onRequest: [app.authenticate] }, verifyPin)

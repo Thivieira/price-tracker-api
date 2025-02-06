@@ -11,7 +11,7 @@ const baseUserSchema = z.object({
   username: z.string(),
   first_name: z.string(),
   last_name: z.string(),
-  email: z.string().email(),
+  email: z.string().email().optional(),
   phone: z.string(),
   password: passwordSchema,
   password_confirmation: passwordSchema,

@@ -16,7 +16,7 @@ datasource db {
 model User {
   id             Int            @id @default(autoincrement())
   phone          String         @unique
-  email          String         @unique
+  email          String?         @unique
   username       String         @unique
   password       String
   hashed_pin     String // 4 digit pin hashed with bcrypt

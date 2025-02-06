@@ -6,11 +6,11 @@ import { makeCreateUserUseCase, makeFindUserUseCase, makeLoginUseCase } from '@/
 export default async function register(request: FastifyRequest, reply: FastifyReply) {
   const validatedData = createUserSchema.parse(request.body)
 
-  const existingEmail = await makeFindUserUseCase().byEmail(validatedData.email)
+  // const existingEmail = await makeFindUserUseCase().byEmail(validatedData.email)
 
-  if (existingEmail) {
-    return reply.status(400).send({ error: 'Email already in use' })
-  }
+  // if (existingEmail) {
+  //   return reply.status(400).send({ error: 'Email already in use' })
+  // }
 
   const existingUsername = await makeFindUserUseCase().byUsername(validatedData.username)
 
@@ -32,7 +32,7 @@ export default async function register(request: FastifyRequest, reply: FastifyRe
   const hashedPin = await bcrypt.hash(validatedData.raw_pin, 10)
 
   const user = await makeCreateUserUseCase().execute({
-    email: validatedData.email,
+    // email: validatedData.email,
     username: validatedData.username,
     password: hashedPassword,
     first_name: validatedData.first_name,
