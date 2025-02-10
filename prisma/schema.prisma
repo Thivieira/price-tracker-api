@@ -68,6 +68,8 @@ model Cryptocurrency {
   ath_date    DateTime
   atl_price   Float
   atl_date    DateTime
+  image_url   String?
+  dominant_color String?
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
   deleted_at  DateTime?

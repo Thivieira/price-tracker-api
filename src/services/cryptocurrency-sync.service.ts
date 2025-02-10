@@ -1,11 +1,12 @@
 import { CryptocurrencyRepository } from '@/repositories/cryptocurrency.repository'
 import { CryptocurrencyService } from '@/services/interfaces/cryptocurrency.service'
-import { prisma } from '@/lib/prisma'
+import { ColorThiefService } from '@/services/color-thief.service'
 
 export class CryptocurrencySyncService {
   constructor(
     private readonly cryptocurrencyRepository: CryptocurrencyRepository,
-    private readonly cryptocurrencyService: CryptocurrencyService
+    private readonly cryptocurrencyService: CryptocurrencyService,
+    private readonly colorThiefService: ColorThiefService
   ) { }
 
   async syncCryptocurrencies() {
@@ -22,7 +23,10 @@ export class CryptocurrencySyncService {
       for (const coin of coins) {
         try {
           const existingCoin = await this.cryptocurrencyRepository.findBySymbol(coin.symbol)
-
+          const image_url = coin.image_url
+          const dominant_color = image_url
+            ? await this.colorThiefService.getDominantColor(image_url)
+            : null
           if (existingCoin) {
             await this.cryptocurrencyRepository.update(existingCoin.id, {
               market_cap: coin.market_cap,
@@ -30,6 +34,8 @@ export class CryptocurrencySyncService {
               low_24h: coin.low_24h,
               high_7d: coin.high_7d,
               low_7d: coin.low_7d,
+              image_url,
+              dominant_color,
             })
             updated++
           } else {
@@ -45,6 +51,8 @@ export class CryptocurrencySyncService {
               ath_date: new Date(coin.ath.timestamp),
               atl_price: coin.atl.price,
               atl_date: new Date(coin.atl.timestamp),
+              image_url,
+              dominant_color,
             })
             created++
           }

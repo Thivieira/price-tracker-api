@@ -15,6 +15,8 @@ export interface CryptocurrencyRepository {
     ath_date: Date
     atl_price: number
     atl_date: Date
+    image_url?: string
+    dominant_color?: string
   }): Promise<Cryptocurrency>
   findBySymbol(symbol: string): Promise<Cryptocurrency | null>
   update(id: number, data: {
@@ -23,6 +25,8 @@ export interface CryptocurrencyRepository {
     low_24h: number
     high_7d: number
     low_7d: number
+    image_url?: string
+    dominant_color?: string
   }): Promise<Cryptocurrency>
   delete(id: number): Promise<void>
 } 

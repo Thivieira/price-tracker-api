@@ -1,6 +1,7 @@
 import { CryptocurrencyService } from "@/services/interfaces/cryptocurrency.service"
 import coingeckoApi from "@/lib/coingecko"
 import { calculatePriceRange } from '@/utils/price'
+import { CoinGeckoMarketsResponse, Coin } from "@/types/coingecko.types"
 
 interface CoinGeckoResponse {
   symbol: string
@@ -22,22 +23,30 @@ interface ConversionRate {
 }
 
 export class CoingeckoService implements CryptocurrencyService {
-  async listCoins(): Promise<CoinGeckoResponse[]> {
+  async listCoins({
+    vs_currency = 'usd',
+    per_page = 250,
+    page = 1,
+    sparkline = true,
+    price_change_percentage = '24h,7d',
+    days = 7,
+    interval = 'daily'
+  }): Promise<any> {
     try {
-      const response = await coingeckoApi.get('/coins/markets', {
+      const response = await coingeckoApi.get<CoinGeckoMarketsResponse>('/coins/markets', {
         params: {
-          vs_currency: 'usd',
+          vs_currency,
           order: 'market_cap_desc',
-          per_page: 100,
-          page: 1,
-          sparkline: true,
-          price_change_percentage: '24h,7d',
-          days: 7,
-          interval: 'daily'
+          per_page,
+          page,
+          sparkline,
+          price_change_percentage,
+          days,
+          interval
         }
       })
 
-      return response.data.map((coin: any) => {
+      return response.data.map((coin: Coin) => {
         // Extract 7-day price history from sparkline data
         const priceHistory = coin.sparkline_in_7d?.price || []
         const { high: high7d, low: low7d } = calculatePriceRange(
@@ -60,7 +69,8 @@ export class CoingeckoService implements CryptocurrencyService {
           atl: {
             price: coin.atl || 0,
             timestamp: coin.atl_date || new Date().toISOString()
-          }
+          },
+          image_url: coin.image
         }
       })
     } catch (error) {

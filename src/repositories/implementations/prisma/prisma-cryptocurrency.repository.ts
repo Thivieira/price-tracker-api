@@ -21,6 +21,7 @@ export class PrismaCryptocurrencyRepository implements CryptocurrencyRepository 
         ath_date: cryptocurrencyData.ath_date!,
         atl_price: cryptocurrencyData.atl_price!,
         atl_date: cryptocurrencyData.atl_date!,
+        image_url: cryptocurrencyData.image_url!,
         created_at: new Date(),
         updated_at: new Date(),
       };
