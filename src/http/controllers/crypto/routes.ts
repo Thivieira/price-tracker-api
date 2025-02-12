@@ -1,4 +1,4 @@
-import { FastifyInstance } from 'fastify'
+import { FastifyInstance } from '@/types/fastify'
 import listCoins from './list-coins'
 import getCoin from './get-coin'
 import syncCoins from './sync-coins'

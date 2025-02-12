@@ -6,6 +6,7 @@ export interface CryptocurrencyRepository {
   create(data: {
     symbol: string
     name: string
+    current_price: number
     market_cap: number
     high_24h: number
     low_24h: number
@@ -20,6 +21,7 @@ export interface CryptocurrencyRepository {
   }): Promise<Cryptocurrency>
   findBySymbol(symbol: string): Promise<Cryptocurrency | null>
   update(id: number, data: {
+    current_price: number
     market_cap: number
     high_24h: number
     low_24h: number

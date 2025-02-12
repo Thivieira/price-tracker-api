@@ -13,7 +13,15 @@ export class CryptocurrencySyncService {
     console.log('Starting cryptocurrency sync...')
 
     try {
-      const coins = await this.cryptocurrencyService.listCoins()
+      const coins = await this.cryptocurrencyService.listCoins({
+        vs_currency: 'usd',
+        per_page: 250,
+        page: 1,
+        sparkline: true,
+        price_change_percentage: '24h,7d',
+        days: 7,
+        interval: 'daily'
+      })
       console.log(`Fetched ${coins.length} coins from CoinGecko`)
 
       let updated = 0
@@ -26,22 +34,24 @@ export class CryptocurrencySyncService {
           const image_url = coin.image_url
           const dominant_color = image_url
             ? await this.colorThiefService.getDominantColor(image_url)
-            : null
+            : undefined
           if (existingCoin) {
             await this.cryptocurrencyRepository.update(existingCoin.id, {
               market_cap: coin.market_cap,
+              current_price: coin.current_price,
               high_24h: coin.high_24h,
               low_24h: coin.low_24h,
               high_7d: coin.high_7d,
               low_7d: coin.low_7d,
-              image_url,
-              dominant_color,
+              image_url: image_url ?? undefined,
+              dominant_color: dominant_color ?? undefined,
             })
             updated++
           } else {
             await this.cryptocurrencyRepository.create({
               symbol: coin.symbol,
               name: coin.name,
+              current_price: coin.current_price,
               market_cap: coin.market_cap,
               high_24h: coin.high_24h,
               low_24h: coin.low_24h,
@@ -51,8 +61,8 @@ export class CryptocurrencySyncService {
               ath_date: new Date(coin.ath.timestamp),
               atl_price: coin.atl.price,
               atl_date: new Date(coin.atl.timestamp),
-              image_url,
-              dominant_color,
+              image_url: image_url ?? undefined,
+              dominant_color: dominant_color ?? undefined,
             })
             created++
           }

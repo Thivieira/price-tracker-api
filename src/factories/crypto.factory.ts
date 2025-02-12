@@ -4,13 +4,15 @@ import { ListCoinsUseCase } from '@/use-cases/crypto/list-coins'
 import { CryptocurrencyService } from '@/services/interfaces/cryptocurrency.service'
 import { GetCoinUseCase } from '@/use-cases/crypto/get-coin'
 import { ConvertCurrencyUseCase } from '@/use-cases/crypto/convert-currency'
+import { ColorThiefService } from '@/services/color-thief.service'
 
 export function makeCryptocurrencyRepository() {
   return new PrismaCryptocurrencyRepository()
 }
 
 export function makeCryptocurrencyService(): CryptocurrencyService {
-  return new CoingeckoService()
+  const colorThiefService = new ColorThiefService()
+  return new CoingeckoService(colorThiefService)
 }
 
 export function makeListCoinsUseCase() {

@@ -5,9 +5,9 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsx watch src/server",
-    "db:generate": "pnpm dlx prisma generate",
-    "db:migrate": "pnpm dlx prisma migrate dev",
-    "db:studio": "pnpm dlx prisma studio",
+    "db:generate": "pnpm dlx prisma generate --schema=./prisma/schema.prisma",
+    "db:migrate": "pnpm dlx prisma migrate dev --schema=./prisma/schema.prisma",
+    "db:studio": "pnpm dlx prisma studio --schema=./prisma/schema.prisma",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"**/*.{js,ts,tsx,json,md}\"",
@@ -15,7 +15,7 @@
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui",
-    "test:migrate": "dotenv -e .env.test -- pnpm dlx prisma migrate dev"
+    "test:migrate": "dotenv -e .env.test -- pnpm dlx prisma migrate dev --schema=./prisma/schema.prisma"
   },
   "dependencies": {
     "@fastify/cors": "10.0.2",
@@ -32,7 +32,7 @@
     "libphonenumber-js": "^1.11.19",
     "node-cron": "^3.0.3",
     "superjson": "^2.2.2",
-    "twilio": "^5.4.3",
+    "twilio": "^5.4.4",
     "zod": "^3.24.1"
   },
   "devDependencies": {
@@ -42,10 +42,10 @@
     "@types/node": "^22.13.1",
     "@types/node-cron": "^3.0.11",
     "@types/supertest": "^6.0.2",
-    "@typescript-eslint/eslint-plugin": "^8.23.0",
+    "@typescript-eslint/eslint-plugin": "^8.24.0",
     "@vitest/coverage-v8": "^3.0.5",
     "dotenv-cli": "^8.0.0",
-    "eslint": "^9.20.0",
+    "eslint": "^9.20.1",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",
     "prettier": "^3.5.0",

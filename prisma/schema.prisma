@@ -56,24 +56,25 @@ model RefreshToken {
 }
 
 model Cryptocurrency {
-  id          Int       @id @default(autoincrement())
-  symbol      String    @unique
-  name        String
-  market_cap  Float
-  high_24h    Float
-  low_24h     Float
-  high_7d     Float
-  low_7d      Float
-  ath_price   Float
-  ath_date    DateTime
-  atl_price   Float
-  atl_date    DateTime
-  image_url   String?
+  id             Int       @id @default(autoincrement())
+  symbol         String    @unique
+  name           String
+  current_price  Float     @default(0)
+  market_cap     Float
+  high_24h       Float
+  low_24h        Float
+  high_7d        Float
+  low_7d         Float
+  ath_price      Float
+  ath_date       DateTime
+  atl_price      Float
+  atl_date       DateTime
+  image_url      String?
   dominant_color String?
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
-  deleted_at  DateTime?
-  Bookmark    Bookmark[]
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+  deleted_at     DateTime?
+  Bookmark       Bookmark[]
 }
 
 model OTPVerification {

@@ -6,7 +6,14 @@ export interface CryptocurrencyService {
     sparkline?: boolean;
     price_change_percentage?: string;
     days?: number,
-    interval?: string
+    interval?: string;
+    order?: string;
   }): Promise<any>
   getCoin(id: string): Promise<any>
+  searchCoins(params: {
+    query: string;
+    vs_currency?: string;
+    per_page?: number;
+    page?: number;
+  }): Promise<any>
 }

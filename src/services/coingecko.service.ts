@@ -2,6 +2,7 @@ import { CryptocurrencyService } from "@/services/interfaces/cryptocurrency.serv
 import coingeckoApi from "@/lib/coingecko"
 import { calculatePriceRange } from '@/utils/price'
 import { CoinGeckoMarketsResponse, Coin } from "@/types/coingecko.types"
+import { ColorThiefService } from "./color-thief.service"
 
 interface CoinGeckoResponse {
   symbol: string
@@ -23,6 +24,62 @@ interface ConversionRate {
 }
 
 export class CoingeckoService implements CryptocurrencyService {
+  constructor(private readonly colorThiefService: ColorThiefService) { }
+  async searchCoins(
+    { query, vs_currency = 'usd' }: { query: string, vs_currency?: string }): Promise<any> {
+    try {
+      // First get search results
+      const searchResponse = await coingeckoApi.get('/search', {
+        params: {
+          query: query.toLowerCase(),
+        }
+      })
+
+      // Extract coin IDs from search results (limit to top 10)
+      const coinIds = searchResponse.data.coins
+        .slice(0, 10)
+        .map((coin: { id: string }) => coin.id)
+        .join(',')
+
+      // Fetch current prices and other market data for found coins
+      const marketResponse = await coingeckoApi.get('/coins/markets', {
+        params: {
+          vs_currency,
+          ids: coinIds,
+          order: 'market_cap_desc',
+          sparkline: false,
+          price_change_percentage: '24h'
+        }
+      })
+
+      return Promise.all(marketResponse.data.map(async (coin: Coin) => {
+        const dominant_color = coin.image
+          ? await this.colorThiefService.getDominantColor(coin.image)
+          : '#000000'
+
+        return {
+          id: coin.id,
+          symbol: coin.symbol.toLowerCase(),
+          name: coin.name,
+          current_price: Number((coin.current_price || 0).toFixed(2)),
+          ath: {
+            price: coin.ath || 0,
+            timestamp: coin.ath_date || new Date().toISOString()
+          },
+          atl: {
+            price: coin.atl || 0,
+            timestamp: coin.atl_date || new Date().toISOString()
+          },
+          image_url: coin.image,
+          dominant_color: dominant_color
+        }
+      }))
+    } catch (error) {
+      console.error('Failed to search coins:', error)
+      throw new Error('Failed to search cryptocurrencies')
+    }
+  }
+
   async listCoins({
     vs_currency = 'usd',
     per_page = 250,
@@ -57,7 +114,8 @@ export class CoingeckoService implements CryptocurrencyService {
         return {
           symbol: coin.symbol.toLowerCase(),
           name: coin.name,
-          market_cap: Math.round(coin.market_cap || 0), // Round market cap to whole numbers
+          current_price: Number((coin.current_price || 0).toFixed(2)),
+          market_cap: Math.round(coin.market_cap || 0),
           high_24h: Number((coin.high_24h || 0).toFixed(2)),
           low_24h: Number((coin.low_24h || 0).toFixed(2)),
           high_7d: high7d,
