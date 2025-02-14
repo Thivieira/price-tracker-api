@@ -27,7 +27,7 @@ describe('calculatePriceRange', () => {
     const priceHistory = [100.12345, 200.45678]
     const currentPrice = 150.789
 
-    const result = calculatePriceRange(priceHistory, currentPrice, 3)
+    const result = calculatePriceRange(priceHistory, currentPrice)
 
     expect(result).toEqual({
       high: 200.457,

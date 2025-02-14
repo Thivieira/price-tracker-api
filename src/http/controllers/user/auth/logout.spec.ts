@@ -34,7 +34,7 @@ describe('Logout (e2e)', () => {
     // Verify that refresh tokens were revoked
     const refreshTokens = await prisma.refreshToken.findMany({
       where: {
-        revokedAt: null
+        revoked_at: null
       }
     })
     expect(refreshTokens).toHaveLength(0)

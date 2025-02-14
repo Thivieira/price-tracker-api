@@ -2,7 +2,9 @@ import { Prisma, User } from '@prisma/client'
 import { UpdateProfileRequest } from '@/schemas/user.schema'
 
 export interface UserRepository {
-  createUser(userData: Omit<Prisma.UserCreateInput, 'created_at' | 'updated_at'>): Promise<User>
+  createUser(userData: Omit<Prisma.UserCreateInput, 'created_at' | 'updated_at'> & {
+    email?: string;
+  }): Promise<User>
   updateUser(userId: number, userData: UpdateProfileRequest): Promise<void>
   findUsers(params: Prisma.UserFindManyArgs): Promise<User[]>
   countUsers(params: Prisma.UserCountArgs): Promise<number>
@@ -16,5 +18,5 @@ export interface UserRepository {
   deleteUser(userId: number): Promise<void>
   restoreUser(userId: number): Promise<void>
   permanentlyDeleteUser(userId: number): Promise<void>
-  updatePinExpiration(userId: number, expiresAt: Date | null): Promise<void>
+  updatePinExpiration(userId: number, expires_at: Date | null): Promise<void>
 }

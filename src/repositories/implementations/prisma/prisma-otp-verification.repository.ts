@@ -5,7 +5,7 @@ export class PrismaOTPVerificationRepository implements OTPVerificationRepositor
   async create(data: {
     userId?: number
     hashedOTP: string
-    expiresAt: Date // Changed from expires_at to expiresAt for consistency
+    expires_at: Date // Changed from expires_at to expires_at for consistency
     attempts: number
     phone: string
   }): Promise<OTPVerification> {
@@ -13,7 +13,7 @@ export class PrismaOTPVerificationRepository implements OTPVerificationRepositor
       data: {
         user_id: data.userId,
         hashed_otp: data.hashedOTP,
-        expires_at: data.expiresAt,
+        expires_at: data.expires_at,
         attempts: data.attempts,
         phone: data.phone
       }

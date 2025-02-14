@@ -4,7 +4,7 @@ export interface OTPVerificationRepository {
   create(data: {
     userId?: number
     hashedOTP: string
-    expiresAt: Date
+    expires_at: Date
     attempts: number
     phone: string
   }): Promise<OTPVerification>

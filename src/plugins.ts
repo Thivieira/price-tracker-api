@@ -29,54 +29,27 @@ export default function registerPlugins(app: FastifyInstance) {
   })
 
   app.register(swagger, {
-    openapi: {
-      openapi: '3.0.0',
+    swagger: {
       info: {
         title: 'Crypto Price Tracker API',
         description: 'API documentation for the Cryptocurrency Price Tracking application',
-        version: '1.0.0',
-        contact: {
-          name: 'API Support',
-          email: 'support@example.com'
-        },
+        version: '1.0.0'
       },
-      servers: [
-        {
-          url: `http://localhost:${env.PORT}`,
-          description: 'Development server',
-        },
-        {
-          url: 'https://api.your-production-url.com',
-          description: 'Production server',
-        },
-      ],
-      tags: [
-        { name: 'auth', description: 'Authentication endpoints' },
-        { name: 'users', description: 'User management endpoints' },
-        { name: 'crypto', description: 'Cryptocurrency related endpoints' },
-        { name: 'bookmarks', description: 'Bookmark management endpoints' },
-      ],
-      components: {
-        securitySchemes: {
-          bearerAuth: {
-            type: 'http',
-            scheme: 'bearer',
-            bearerFormat: 'JWT',
-          },
-        },
-      },
-    },
-    hideUntagged: true,
-    exposeRoute: true,
+      securityDefinitions: {
+        bearerAuth: {
+          type: 'apiKey',
+          name: 'Authorization',
+          in: 'header'
+        }
+      }
+    }
   })
 
   app.register(swaggerUi, {
     routePrefix: '/documentation',
     uiConfig: {
       docExpansion: 'list',
-      deepLinking: false,
-      displayRequestDuration: true,
-      filter: true
+      deepLinking: false
     },
     staticCSP: true,
     transformStaticCSP: (header) => header,

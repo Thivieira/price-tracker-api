@@ -2,13 +2,12 @@ import { FastifyInstance } from 'fastify'
 import register from '@/http/controllers/user/auth/register'
 import login from '@/http/controllers/user/auth/login'
 import refresh from '@/http/controllers/user/auth/refresh'
-import logout from '@/http/controllers/user/auth/logout'
+import logout, { logoutOpts } from '@/http/controllers/user/auth/logout'
 import verifyPin from '@/http/controllers/user/auth/verify-pin'
 import setupPin from '@/http/controllers/user/auth/setup-pin'
-import getProfile from '@/http/controllers/user/profile/get-profile'
+import getProfile, { getProfileOpts } from '@/http/controllers/user/profile/get-profile'
 import updateProfile from '@/http/controllers/user/profile/update-profile'
-import updatePassword from '@/http/controllers/user/profile/update-password'
-import updatePin, { updatePinOpts } from '@/http/controllers/user/profile/update-pin'
+import updatePin, { updatePinOpts, UpdatePinBody } from '@/http/controllers/user/profile/update-pin'
 import listUsers from './list-users'
 import getUser from './get-user'
 import { sendOTP, resendOTP, verifyOTP } from './auth/otp'
@@ -24,7 +23,6 @@ import { sendOTPOpts, verifyOTPOpts } from './auth/otp'
 import { successResponseSchema, genericErrorSchema } from '@/schemas/route-schemas'
 import { updateProfileOpts } from '@/http/controllers/user/profile/update-profile'
 import { setupPinOpts } from './auth/setup-pin'
-// import updateProfilePhoto from './profile/update-profile-photo'
 
 export async function userRoutes(app: FastifyInstance) {
   app.post('/auth/register', registerOpts, register)
@@ -33,43 +31,9 @@ export async function userRoutes(app: FastifyInstance) {
   app.post('/auth/otp', sendOTPOpts, sendOTP)
   app.post('/auth/otp/resend', resendOTP)
   app.post('/auth/otp/verify', verifyOTPOpts, verifyOTP)
-  app.post('/auth/logout', {
-    schema: {
-      tags: ['auth'],
-      description: 'Logout user',
-      security: [{ bearerAuth: [] }],
-      response: {
-        200: successResponseSchema,
-        401: genericErrorSchema
-      }
-    },
-    onRequest: [app.authenticate]
-  }, logout)
+  app.post('/auth/logout', logoutOpts, logout)
   app.get('/auth/me', {
-    schema: {
-      tags: ['users'],
-      description: 'Get current user profile',
-      security: [{ bearerAuth: [] }],
-      response: {
-        200: {
-          type: 'object',
-          properties: {
-            success: { type: 'boolean' },
-            data: {
-              type: 'object',
-              properties: {
-                id: { type: 'number' },
-                username: { type: 'string' },
-                email: { type: 'string' },
-                phone: { type: 'string' },
-                role: { type: 'string' }
-              }
-            }
-          }
-        },
-        401: genericErrorSchema
-      }
-    },
+    ...getProfileOpts,
     onRequest: [app.authenticate]
   }, getProfile)
   app.post('/auth/verify-pin', {
@@ -84,15 +48,10 @@ export async function userRoutes(app: FastifyInstance) {
     ...updateProfileOpts,
     onRequest: [app.authenticate]
   }, updateProfile)
-  app.patch('/profile/pin', {
+  app.patch<{ Body: UpdatePinBody }>('/profile/pin', {
     ...updatePinOpts,
     onRequest: [app.authenticate]
   }, updatePin)
-  // app.patch(
-  //   '/auth/profile/update-avatar-photo',
-  //   { onRequest: [app.authenticate] },
-  //   updateProfilePhoto,
-  // )
 
   app.get('/users', {
     schema: {

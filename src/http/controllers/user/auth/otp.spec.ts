@@ -129,8 +129,8 @@ describe('OTP Verification (e2e)', () => {
     await prisma.oTPVerification.create({
       data: {
         phone: fakeUserRegisterInputWithValidPhone.phone,
-        hashedOTP: 'some-hashed-value',
-        expiresAt: new Date(Date.now() - 1000), // Set to past date
+        hashed_otp: 'some-hashed-value',
+        expires_at: new Date(Date.now() - 1000), // Set to past date
         attempts: 0
       }
     })
@@ -159,9 +159,9 @@ describe('OTP Verification (e2e)', () => {
     await prisma.oTPVerification.create({
       data: {
         phone: fakeUserRegisterInputWithValidPhone.phone,
-        hashedOTP: 'some-hashed-value',
-        expiresAt: new Date(Date.now() + 600000), // 10 minutes from now
-        attempts: 3 // Max attempts reached
+        hashed_otp: 'some-hashed-value',
+        expires_at: new Date(Date.now() + 600000),
+        attempts: 3
       }
     })
 

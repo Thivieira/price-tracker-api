@@ -1,7 +1,14 @@
 import { makeFindUserUseCase } from "@/factories/user.factory"
 import { FastifyReply, FastifyRequest } from "fastify"
 
-export default async function getUser(request: FastifyRequest, reply: FastifyReply) {
+interface GetUserParams {
+  id: string
+}
+
+export default async function getUser(
+  request: FastifyRequest<{ Params: GetUserParams }>,
+  reply: FastifyReply
+) {
   const { id } = request.params
 
   const user = await makeFindUserUseCase().byId(Number(id))

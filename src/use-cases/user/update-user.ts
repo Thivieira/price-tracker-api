@@ -25,7 +25,7 @@ export class UpdateUserProfileUseCase {
   }
 
   async setupPinVerification(userId: number) {
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
-    return this.userRepository.updatePinExpiration(userId, expiresAt);
+    const expires_at = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+    return this.userRepository.updatePinExpiration(userId, expires_at);
   }
 }

@@ -36,7 +36,10 @@ export const refreshOpts = {
     body: {
       type: 'object',
       properties: {
-        refreshToken: { type: 'string', description: 'Valid refresh token' }
+        refreshToken: {
+          type: 'string',
+          description: 'Valid refresh token'
+        }
       }
     },
     headers: {
@@ -58,6 +61,12 @@ export const refreshOpts = {
         }
       },
       401: {
+        type: 'object',
+        properties: {
+          error: { type: 'string' }
+        }
+      },
+      500: {
         type: 'object',
         properties: {
           error: { type: 'string' }

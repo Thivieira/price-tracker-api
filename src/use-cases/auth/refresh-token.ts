@@ -36,7 +36,7 @@ export class RefreshTokenUseCase {
 
     const newRefreshToken = await this.refreshTokenRepository.create({
       userId: refreshToken.user_id,
-      expiresAt: dayjs().add(7, 'days').toDate(),
+      expires_at: dayjs().add(7, 'days').toDate(),
     })
 
     return {
@@ -48,7 +48,7 @@ export class RefreshTokenUseCase {
   async createRefreshToken(userId: number) {
     const newRefreshToken = await this.refreshTokenRepository.create({
       userId: userId,
-      expiresAt: dayjs().add(7, 'days').toDate(),
+      expires_at: dayjs().add(7, 'days').toDate(),
     })
 
     return newRefreshToken

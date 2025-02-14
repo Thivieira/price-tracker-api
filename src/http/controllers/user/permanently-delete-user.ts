@@ -25,11 +25,11 @@ export default async function permanentlyDeleteUser(request: FastifyRequest, rep
 
     // Delete related records first
     await prisma.refreshToken.deleteMany({
-      where: { userId: id }
+      where: { user_id: id }
     })
 
     await prisma.oTPVerification.deleteMany({
-      where: { userId: id }
+      where: { user_id: id }
     })
 
     // Finally delete the user

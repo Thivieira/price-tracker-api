@@ -2,6 +2,52 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import { makeGetProfileUseCase } from '@/factories/user.factory'
 import { hasValidAuthSubject } from '@/utils/valid-subject';
 
+export const getProfileOpts = {
+  schema: {
+    tags: ['users'],
+    description: 'Get current user profile',
+    security: [{ bearerAuth: [] }],
+    response: {
+      200: {
+        type: 'object',
+        properties: {
+          user: {
+            type: 'object',
+            properties: {
+              id: { type: 'number' },
+              username: { type: 'string' },
+              email: { type: 'string' },
+              first_name: { type: 'string' },
+              last_name: { type: 'string' },
+              phone: { type: 'string' },
+              created_at: { type: 'string', format: 'date-time' },
+              updated_at: { type: 'string', format: 'date-time' }
+            }
+          }
+        }
+      },
+      401: {
+        type: 'object',
+        properties: {
+          error: { type: 'string' }
+        }
+      },
+      400: {
+        type: 'object',
+        properties: {
+          message: { type: 'string' }
+        }
+      },
+      500: {
+        type: 'object',
+        properties: {
+          message: { type: 'string' }
+        }
+      }
+    }
+  }
+}
+
 export default async function getProfile(request: FastifyRequest, reply: FastifyReply) {
   try {
 

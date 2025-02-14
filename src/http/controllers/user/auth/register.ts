@@ -4,13 +4,11 @@ import { createUserSchema } from '@/schemas/user.schema'
 import { makeCreateUserUseCase, makeFindUserUseCase, makeLoginUseCase } from '@/factories/user.factory'
 
 export default async function register(request: FastifyRequest, reply: FastifyReply) {
+  console.log(request.body)
+
   const validatedData = createUserSchema.parse(request.body)
 
-  // const existingEmail = await makeFindUserUseCase().byEmail(validatedData.email)
-
-  // if (existingEmail) {
-  //   return reply.status(400).send({ error: 'Email already in use' })
-  // }
+  console.log('passed')
 
   const existingUsername = await makeFindUserUseCase().byUsername(validatedData.username)
 
@@ -32,7 +30,6 @@ export default async function register(request: FastifyRequest, reply: FastifyRe
   const hashedPin = await bcrypt.hash(validatedData.raw_pin, 10)
 
   const user = await makeCreateUserUseCase().execute({
-    // email: validatedData.email,
     username: validatedData.username,
     password: hashedPassword,
     first_name: validatedData.first_name,
@@ -45,9 +42,7 @@ export default async function register(request: FastifyRequest, reply: FastifyRe
     region: validatedData.region,
     zip_code: validatedData.zip_code,
     role: 'CUSTOMER',
-    hashed_pin: hashedPin,
-    created_at: new Date(),
-    updated_at: new Date(),
+    hashed_pin: hashedPin
   })
 
 
@@ -66,18 +61,48 @@ export const registerOpts = {
     description: 'Register a new user',
     body: {
       type: 'object',
-      required: ['username', 'email', 'password', 'phone'],
+      required: [
+        'username',
+        'first_name',
+        'last_name',
+        'phone',
+        'password',
+        'password_confirmation',
+        'birthdate',
+        'street_address',
+        'city',
+        'region',
+        'zip_code'
+      ],
       properties: {
         username: { type: 'string', description: 'Unique username' },
-        email: { type: 'string', format: 'email', description: 'Valid email address' },
-        password: { type: 'string', format: 'password', minLength: 8 },
-        phone: { type: 'string', description: 'Phone number with country code' }
+        first_name: { type: 'string', minLength: 2 },
+        last_name: { type: 'string', minLength: 2 },
+        phone: { type: 'string', description: 'Phone number with country code' },
+        password: {
+          type: 'string',
+          format: 'password',
+          description: 'Must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
+          minLength: 8,
+          maxLength: 100
+        },
+        password_confirmation: {
+          type: 'string',
+          description: 'Must match password field'
+        },
+        birthdate: { type: 'string' },
+        street_address: { type: 'string', minLength: 5 },
+        unit_number: { type: 'string', nullable: true },
+        city: { type: 'string', minLength: 2 },
+        region: { type: 'string', minLength: 2 },
+        zip_code: { type: 'string', minLength: 5 }
       }
     },
     response: {
       201: {
         type: 'object',
         properties: {
+          success: { type: 'boolean' },
           message: { type: 'string' },
           accessToken: { type: 'string' },
           refreshToken: { type: 'string' }
@@ -86,9 +111,21 @@ export const registerOpts = {
       400: {
         type: 'object',
         properties: {
+          error: { type: 'string' }
+        }
+      },
+      409: {
+        type: 'object',
+        properties: {
           success: { type: 'boolean' },
-          message: { type: 'string' },
-          errors: { type: 'object' }
+          message: { type: 'string' }
+        }
+      },
+      500: {
+        type: 'object',
+        properties: {
+          success: { type: 'boolean' },
+          message: { type: 'string' }
         }
       }
     }

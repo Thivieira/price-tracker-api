@@ -6,7 +6,7 @@ import { env } from '@/env'
 import { randomBytes } from 'crypto'
 
 export class PrismaRefreshTokenRepository implements RefreshTokenRepository {
-  async create(data: { userId: number; expiresAt: Date }): Promise<RefreshToken> {
+  async create(data: { userId: number; expires_at: Date }): Promise<RefreshToken> {
     const jwtToken = app.jwt.sign(
       { sub: data.userId },
       { key: env.REFRESH_TOKEN_SECRET, expiresIn: '7d' },
@@ -20,7 +20,7 @@ export class PrismaRefreshTokenRepository implements RefreshTokenRepository {
         data: {
           token: uniqueToken,
           user_id: data.userId,
-          expires_at: data.expiresAt,
+          expires_at: data.expires_at,
         },
       })
     } catch (error) {
@@ -32,7 +32,7 @@ export class PrismaRefreshTokenRepository implements RefreshTokenRepository {
           data: {
             token: newUniqueToken,
             user_id: data.userId,
-            expires_at: data.expiresAt,
+            expires_at: data.expires_at,
           },
         })
       }

@@ -80,10 +80,10 @@ export class PrismaUserRepository implements UserRepository {
     await prisma.user.delete({ where: { id: userId } })
   }
 
-  async updatePinExpiration(userId: number, expiresAt: Date | null): Promise<void> {
+  async updatePinExpiration(userId: number, expires_at: Date | null): Promise<void> {
     await prisma.user.update({
       where: { id: userId },
-      data: { pin_expires_at: expiresAt },
+      data: { pin_expires_at: expires_at },
     });
   }
 

@@ -78,7 +78,7 @@ describe('Refresh Token (e2e)', () => {
         token: loginResponse.body.refreshToken
       },
       data: {
-        expiresAt: new Date(Date.now() - 1000) // Set to past date
+        expires_at: new Date(Date.now() - 1000) // Set to past date
       }
     })
 
@@ -112,7 +112,7 @@ describe('Refresh Token (e2e)', () => {
         token: loginResponse.body.refreshToken
       },
       data: {
-        revokedAt: new Date()
+        revoked_at: new Date()
       }
     })
 

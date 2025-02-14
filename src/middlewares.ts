@@ -18,7 +18,7 @@ export default function registerMiddlewares(app: FastifyInstance) {
     'isAdmin',
     async function isAdmin(request: FastifyRequest, reply: FastifyReply) {
       const subject = request.user.sub
-      const user = await makeFindUserUseCase().byId(subject)
+      const user = await makeFindUserUseCase().byId(Number(subject))
 
       if (user?.role !== Role.ADMIN) {
         reply.status(403).send({ error: 'Forbidden' })

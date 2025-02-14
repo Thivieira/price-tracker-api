@@ -2,6 +2,11 @@ import { randomInt } from 'crypto'
 import bcrypt from 'bcrypt'
 import { createMessage } from '@/lib/twillio'
 
+interface TwilioError {
+  code: number
+  message: string
+}
+
 export class OTPService {
   private readonly OTP_LENGTH = 4
   private readonly SALT_ROUNDS = 10
@@ -24,13 +29,19 @@ export class OTPService {
     try {
       await createMessage(`Your verification code for Truther is: ${otp}`, phone)
     } catch (error) {
-      if (error.code === 21211) {
-        throw new Error('Invalid phone number format')
-      }
-      if (error.code === 21612) {
-        throw new Error('Unable to send SMS to this number')
+      if (isErrorWithCode(error)) {
+        if (error.code === 21211) {
+          throw new Error('Invalid phone number format')
+        }
+        if (error.code === 21612) {
+          throw new Error('Unable to send SMS to this number')
+        }
       }
       throw new Error('Failed to send verification code')
     }
   }
+}
+
+function isErrorWithCode(error: unknown): error is TwilioError {
+  return typeof error === 'object' && error !== null && 'code' in error
 } 

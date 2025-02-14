@@ -5,6 +5,12 @@ import bcrypt from 'bcrypt'
 import { json } from '@/lib/json'
 import { genericErrorSchema, successResponseSchema } from '@/schemas/route-schemas'
 
+export interface UpdatePinBody {
+  current_pin: string
+  new_pin: string
+  confirm_new_pin: string
+}
+
 export const updatePinOpts = {
   schema: {
     tags: ['users'],
@@ -16,34 +22,76 @@ export const updatePinOpts = {
       properties: {
         current_pin: {
           type: 'string',
-          pattern: '^[0-9]{4}$',
+          minLength: 4,
+          maxLength: 4,
+          pattern: '^[0-9]+$',
           description: 'Current 4-digit PIN'
         },
         new_pin: {
           type: 'string',
-          pattern: '^[0-9]{4}$',
+          minLength: 4,
+          maxLength: 4,
+          pattern: '^[0-9]+$',
           description: 'New 4-digit PIN'
         },
         confirm_new_pin: {
           type: 'string',
-          pattern: '^[0-9]{4}$',
+          minLength: 4,
+          maxLength: 4,
+          pattern: '^[0-9]+$',
           description: 'Confirm new 4-digit PIN'
         }
       }
     },
     response: {
-      200: successResponseSchema,
-      400: genericErrorSchema,
-      401: genericErrorSchema,
-      404: genericErrorSchema,
-      500: genericErrorSchema
+      200: {
+        type: 'object',
+        properties: {
+          success: { type: 'boolean' },
+          message: { type: 'string' }
+        }
+      },
+      400: {
+        type: 'object',
+        properties: {
+          success: { type: 'boolean' },
+          message: { type: 'string' },
+          errors: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                code: { type: 'string' },
+                message: { type: 'string' },
+                path: {
+                  type: 'array',
+                  items: { type: 'string' }
+                }
+              }
+            }
+          }
+        }
+      },
+      401: {
+        type: 'object',
+        properties: {
+          error: { type: 'string' }
+        }
+      },
+      500: {
+        type: 'object',
+        properties: {
+          success: { type: 'boolean' },
+          message: { type: 'string' }
+        }
+      }
     }
   }
 }
 
 export default async function updatePin(
-  request: FastifyRequest,
-  reply: FastifyReply,
+  request: FastifyRequest<{ Body: UpdatePinBody }>,
+  reply: FastifyReply
 ) {
   try {
     const { new_pin } = request.body

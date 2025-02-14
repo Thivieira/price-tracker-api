@@ -68,10 +68,19 @@ export const verifyPinOpts = {
         type: 'object',
         properties: {
           message: { type: 'string' },
-          issues: { type: 'object' }
+          issues: {
+            type: 'object',
+            additionalProperties: true
+          }
         }
       },
       401: {
+        type: 'object',
+        properties: {
+          message: { type: 'string' }
+        }
+      },
+      500: {
         type: 'object',
         properties: {
           message: { type: 'string' }

@@ -27,12 +27,12 @@ export class OTPUseCase {
 
     const otp = this.otpService.generateOTP()
     const hashedOTP = await this.otpService.hashOTP(otp)
-    const expiresAt = new Date(Date.now() + this.EXPIRY_MINUTES * 60 * 1000)
+    const expires_at = new Date(Date.now() + this.EXPIRY_MINUTES * 60 * 1000)
 
     await this.otpVerificationRepository.create({
       userId,
       hashedOTP,
-      expiresAt,
+      expires_at,
       attempts: 0,
       phone
     })

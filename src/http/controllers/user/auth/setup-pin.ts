@@ -22,11 +22,53 @@ export const setupPinOpts = {
       }
     },
     response: {
-      200: successResponseSchema,
-      400: genericErrorSchema,
-      401: genericErrorSchema,
-      404: genericErrorSchema,
-      500: genericErrorSchema
+      200: {
+        type: 'object',
+        properties: {
+          success: { type: 'boolean' },
+          message: { type: 'string' }
+        }
+      },
+      400: {
+        type: 'object',
+        properties: {
+          success: { type: 'boolean' },
+          message: { type: 'string' },
+          errors: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                code: { type: 'string' },
+                message: { type: 'string' },
+                path: {
+                  type: 'array',
+                  items: { type: 'string' }
+                }
+              }
+            }
+          }
+        }
+      },
+      401: {
+        type: 'object',
+        properties: {
+          error: { type: 'string' }
+        }
+      },
+      404: {
+        type: 'object',
+        properties: {
+          message: { type: 'string' }
+        }
+      },
+      500: {
+        type: 'object',
+        properties: {
+          success: { type: 'boolean' },
+          message: { type: 'string' }
+        }
+      }
     }
   }
 }

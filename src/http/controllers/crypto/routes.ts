@@ -1,4 +1,4 @@
-import { FastifyInstance } from '@/types/fastify'
+import { FastifyInstance } from 'fastify'
 import listCoins from './list-coins'
 import getCoin from './get-coin'
 import syncCoins from './sync-coins'
@@ -24,7 +24,21 @@ export async function cryptoRoutes(app: FastifyInstance) {
                   id: { type: 'string' },
                   symbol: { type: 'string' },
                   name: { type: 'string' },
-                  current_price: { type: 'number' }
+                  current_price: { type: 'number' },
+                  market_cap: { type: 'number' },
+                  high_24h: { type: 'number' },
+                  low_24h: { type: 'number' },
+                  high_7d: { type: 'number' },
+                  low_7d: { type: 'number' },
+                  ath_price: { type: 'number' },
+                  ath_date: { type: 'string' },
+                  atl_price: { type: 'number' },
+                  atl_date: { type: 'string' },
+                  image_url: { type: 'string' },
+                  dominant_color: { type: 'string' },
+                  created_at: { type: 'string' },
+                  updated_at: { type: 'string' },
+                  deleted_at: { type: 'string' }
                 }
               }
             }
@@ -52,30 +66,30 @@ export async function cryptoRoutes(app: FastifyInstance) {
         type: 'object',
         properties: {
           vs_currency: { type: 'string', default: 'usd' },
-          forceFetch: { type: 'boolean', default: false }
+          forceFetch: { type: 'string', default: 'false' }
         }
       },
       security: [{ bearerAuth: [] }],
       response: {
-        200: {
-          type: 'object',
-          properties: {
-            success: { type: 'boolean' },
-            data: {
-              type: 'object',
-              properties: {
-                id: { type: 'string' },
-                symbol: { type: 'string' },
-                name: { type: 'string' },
-                current_price: { type: 'number' },
-                market_cap: { type: 'number' },
-                market_cap_rank: { type: 'number' },
-                price_change_24h: { type: 'number' },
-                price_change_percentage_24h: { type: 'number' }
-              }
-            }
-          }
-        },
+        // 200: {
+        //   type: 'object',
+        //   properties: {
+        //     success: { type: 'boolean' },
+        //     data: {
+        //       type: 'object',
+        //       properties: {
+        //         id: { type: 'string' },
+        //         symbol: { type: 'string' },
+        //         name: { type: 'string' },
+        //         current_price: { type: 'number' },
+        //         market_cap: { type: 'number' },
+        //         market_cap_rank: { type: 'number' },
+        //         price_change_24h: { type: 'number' },
+        //         price_change_percentage_24h: { type: 'number' }
+        //       }
+        //     }
+        //   }
+        // },
         401: genericErrorSchema,
         404: genericErrorSchema,
         500: genericErrorSchema

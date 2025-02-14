@@ -1,16 +1,25 @@
 import { z } from 'zod'
 
+export interface PaginationParams {
+  page?: string | number;
+  limit?: string | number;
+  search?: string;
+  sort?: string;
+  order?: 'asc' | 'desc';
+  [key: string]: any;
+}
+
 export const createPaginationSchema = <T extends z.ZodEnum<any>>(
   sortFields: T,
   defaultSort: z.infer<T>
 ) => {
   return z.object({
-    page: z.string().default('1'),
-    limit: z.string().default('10'),
+    page: z.coerce.number().min(1).default(1),
+    limit: z.coerce.number().min(1).max(100).default(10),
     search: z.string().optional(),
     sort: sortFields.default(defaultSort),
     order: z.enum(['asc', 'desc']).default('desc')
-  })
+  }).passthrough()
 }
 
 export interface PaginatedResult<T> {
@@ -23,22 +32,12 @@ export interface PaginatedResult<T> {
   }
 }
 
-export interface PaginationParams {
-  page: string
-  limit: string
-  search?: string
-  sort: string
-  order: 'asc' | 'desc'
-}
-
-export function getPaginationArgs(params: PaginationParams) {
-  const skip = (Number(params.page) - 1) * Number(params.limit)
-  const take = Number(params.limit)
-
-  return {
-    skip,
-    take
-  }
+export const getPaginationArgs = (params: PaginationParams) => {
+  const page = Number(params.page)
+  const limit = Number(params.limit)
+  const skip = (page - 1) * limit
+  const take = limit
+  return { skip, take }
 }
 
 export function createPaginatedResponse<T>(

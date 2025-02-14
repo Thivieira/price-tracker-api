@@ -10,7 +10,7 @@ async function run() {
   const cryptocurrencySyncService = makeCryptocurrencySyncService()
 
   // Run initial sync
-  await cryptocurrencySyncService.syncCryptocurrencies()
+  // await cryptocurrencySyncService.syncCryptocurrencies()
 
   // Run cleanup every day at midnight
   cron.schedule('0 0 * * *', () => {
