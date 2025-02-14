@@ -14,4 +14,4 @@ RUN pnpm run build
 
 EXPOSE ${PORT}
 
-CMD ["node", "dist/server.js"]
+CMD ["node", "--experimental-specifier-resolution=node", "dist/server.js"]
