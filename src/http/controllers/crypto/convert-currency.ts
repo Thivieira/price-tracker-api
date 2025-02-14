@@ -6,7 +6,8 @@ import { json } from '@/lib/json'
 const convertCurrencySchema = z.object({
   fromSymbol: z.string(),
   toSymbol: z.string(),
-  amount: z.number().positive()
+  amount: z.number().positive(),
+  vs_currency: z.string().default('usd')
 })
 
 export default async function convertCurrency(
@@ -15,6 +16,8 @@ export default async function convertCurrency(
 ) {
   try {
     const validation = convertCurrencySchema.safeParse(request.body)
+
+    console.log("REQUEST BODY: ", request.body)
 
     if (!validation.success) {
       return reply.status(400).send(

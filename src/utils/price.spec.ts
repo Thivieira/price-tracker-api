@@ -9,8 +9,8 @@ describe('calculatePriceRange', () => {
     const result = calculatePriceRange(priceHistory, currentPrice)
 
     expect(result).toEqual({
-      high: 200.46,
-      low: 100.12
+      high: 200.456,
+      low: 100.123
     })
   })
 
@@ -18,8 +18,8 @@ describe('calculatePriceRange', () => {
     const result = calculatePriceRange([], 150.789)
 
     expect(result).toEqual({
-      high: 150.79,
-      low: 150.79
+      high: 150.789,
+      low: 150.789
     })
   })
 
@@ -39,8 +39,8 @@ describe('calculatePriceRange', () => {
     const result = calculatePriceRange([-100, NaN, Infinity], -50)
 
     expect(result).toEqual({
-      high: 0.00,
-      low: 0.00
+      high: 0,
+      low: 0
     })
   })
 }) 

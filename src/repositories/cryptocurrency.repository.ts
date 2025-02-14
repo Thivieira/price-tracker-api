@@ -1,6 +1,7 @@
 import { Cryptocurrency, Prisma } from '@prisma/client'
 
 export interface CryptocurrencyRepository {
+  findBySymbol(symbol: string): Promise<Cryptocurrency | null>
   findAll(params: Prisma.CryptocurrencyFindManyArgs): Promise<Cryptocurrency[]>
   count(params: Prisma.CryptocurrencyCountArgs): Promise<number>
   create(data: {

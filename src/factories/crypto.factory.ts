@@ -23,7 +23,8 @@ export function makeListCoinsUseCase() {
 
 export function makeGetCoinUseCase() {
   const cryptocurrencyRepository = makeCryptocurrencyRepository()
-  return new GetCoinUseCase(cryptocurrencyRepository)
+  const cryptocurrencyService = makeCryptocurrencyService()
+  return new GetCoinUseCase(cryptocurrencyRepository, cryptocurrencyService)
 }
 
 export function makeConvertCurrencyUseCase() {

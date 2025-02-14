@@ -9,8 +9,7 @@ interface PriceRange {
 
 export function calculatePriceRange(
   priceHistory: number[],
-  currentPrice: number,
-  decimals = 2
+  currentPrice: number
 ): PriceRange {
   try {
     // Validate inputs
@@ -18,20 +17,19 @@ export function calculatePriceRange(
     const validPriceHistory = priceHistory.map(price => priceSchema.parse(price))
 
     if (validPriceHistory.length === 0) {
-      const formattedPrice = Number(validCurrentPrice.toFixed(decimals))
       return {
-        high: formattedPrice,
-        low: formattedPrice
+        high: validCurrentPrice,
+        low: validCurrentPrice
       }
     }
 
     return {
-      high: Number(Math.max(...validPriceHistory).toFixed(decimals)),
-      low: Number(Math.min(...validPriceHistory).toFixed(decimals))
+      high: Math.max(...validPriceHistory),
+      low: Math.min(...validPriceHistory)
     }
   } catch (error) {
     // Fallback to current price if validation fails
-    const fallbackPrice = Number((currentPrice || 0).toFixed(decimals))
+    const fallbackPrice = currentPrice || 0
     return {
       high: fallbackPrice,
       low: fallbackPrice

@@ -16,4 +16,5 @@ export interface CryptocurrencyService {
     per_page?: number;
     page?: number;
   }): Promise<any>
+  convertAmount(fromSymbol: string, toSymbol: string, amount: number, vs_currency: string): Promise<any>
 }
