@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "tsc",
+    "postinstall": "prisma generate",
+    "build": "prisma generate && tsc",
     "dev": "tsx watch src/server",
     "start": "node dist/server.js",
     "db:generate": "pnpm dlx prisma generate --schema=./prisma/schema.prisma",
@@ -16,7 +17,8 @@
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui",
-    "test:migrate": "dotenv -e .env.test -- pnpm dlx prisma migrate dev --schema=./prisma/schema.prisma"
+    "test:migrate": "dotenv -e .env.test -- pnpm dlx prisma migrate dev --schema=./prisma/schema.prisma",
+    "postbuild": "cp -r prisma dist/ && cp package.json dist/"
   },
   "dependencies": {
     "@fastify/cors": "10.0.2",

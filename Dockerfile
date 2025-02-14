@@ -2,8 +2,9 @@ FROM node:22
 
 WORKDIR /app
 
-COPY package*.json .
-COPY pnpm-lock.yaml .
+COPY package*.json ./
+COPY pnpm-lock.yaml ./
+COPY prisma ./prisma/
 
 RUN npm install -g pnpm && pnpm install
 
@@ -13,4 +14,4 @@ RUN pnpm run build
 
 EXPOSE ${PORT}
 
-CMD ["pnpm", "run", "dev"]
+CMD ["node", "dist/server.js"]
