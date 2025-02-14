@@ -1,5 +1,5 @@
 import { UserRepository } from "@/repositories/user.repository";
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 
 export class SetupPinUseCase {
   private readonly PIN_EXPIRY_MINUTES = 10;

@@ -4,7 +4,7 @@ import request from 'supertest'
 import { afterAll, beforeAll, describe, expect, it, beforeEach } from 'vitest'
 import { prisma } from '@/lib/prisma'
 import { fakeUserRegisterInput } from '@/utils/test/fake-data'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 
 describe('Update PIN (e2e)', () => {
   beforeAll(async () => {

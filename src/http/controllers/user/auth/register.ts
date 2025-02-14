@@ -1,5 +1,5 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import { createUserSchema } from '@/schemas/user.schema'
 import { makeCreateUserUseCase, makeFindUserUseCase, makeLoginUseCase } from '@/factories/user.factory'
 

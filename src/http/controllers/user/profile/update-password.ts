@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 import { makeUpdateUserProfileUseCase, makeFindUserUseCase } from '@/factories/user.factory'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import { json } from '@/lib/json'
 import { UpdateProfileRequest } from '@/schemas/user.schema'
 

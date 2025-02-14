@@ -28,7 +28,7 @@
     "@fastify/swagger-ui": "^5.2.1",
     "@prisma/client": "^6.3.1",
     "axios": "^1.7.9",
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.0",
     "colorthief": "^2.6.0",
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",

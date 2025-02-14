@@ -1,5 +1,5 @@
 import { randomInt } from 'crypto'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import { createMessage } from '@/lib/twillio'
 
 interface TwilioError {

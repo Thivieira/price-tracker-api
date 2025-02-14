@@ -1,6 +1,6 @@
 import { InvalidCredentialsError } from "@/exceptions/auth.exceptions";
 import { UserRepository } from "@/repositories/user.repository";
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 
 export class PinUseCase {
   constructor(

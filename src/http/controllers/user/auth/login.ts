@@ -1,6 +1,6 @@
 import { makeFindUserUseCase, makeLoginUseCase } from '@/factories/user.factory';
 import { FastifyRequest, FastifyReply } from 'fastify'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import { z } from 'zod'
 
 const loginSchema = z.object({
