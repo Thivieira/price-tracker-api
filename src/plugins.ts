@@ -7,6 +7,7 @@ import { env } from './env'
 // import multipart from '@fastify/multipart'
 import swagger from '@fastify/swagger'
 import rateLimit from '@fastify/rate-limit'
+import swaggerUi from '@fastify/swagger-ui'
 
 export default function registerPlugins(app: FastifyInstance) {
   app.register(cors)
@@ -31,34 +32,54 @@ export default function registerPlugins(app: FastifyInstance) {
     openapi: {
       openapi: '3.0.0',
       info: {
-        title: 'Cripto Price Tracker',
-        description: 'Cripto Price Tracker API',
-        version: '0.1.0',
+        title: 'Crypto Price Tracker API',
+        description: 'API documentation for the Cryptocurrency Price Tracking application',
+        version: '1.0.0',
+        contact: {
+          name: 'API Support',
+          email: 'support@example.com'
+        },
       },
       servers: [
         {
           url: `http://localhost:${env.PORT}`,
           description: 'Development server',
         },
+        {
+          url: 'https://api.your-production-url.com',
+          description: 'Production server',
+        },
       ],
       tags: [
-        { name: 'user', description: 'User related end-points' },
-        { name: 'code', description: 'Code related end-points' },
+        { name: 'auth', description: 'Authentication endpoints' },
+        { name: 'users', description: 'User management endpoints' },
+        { name: 'crypto', description: 'Cryptocurrency related endpoints' },
+        { name: 'bookmarks', description: 'Bookmark management endpoints' },
       ],
       components: {
         securitySchemes: {
-          apiKey: {
-            type: 'apiKey',
-            name: 'apiKey',
-            in: 'header',
+          bearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT',
           },
         },
       },
-      externalDocs: {
-        url: 'https://swagger.io',
-        description: 'Find more info here',
-      },
     },
+    hideUntagged: true,
+    exposeRoute: true,
+  })
+
+  app.register(swaggerUi, {
+    routePrefix: '/documentation',
+    uiConfig: {
+      docExpansion: 'list',
+      deepLinking: false,
+      displayRequestDuration: true,
+      filter: true
+    },
+    staticCSP: true,
+    transformStaticCSP: (header) => header,
   })
 
   // app.register(formbody)

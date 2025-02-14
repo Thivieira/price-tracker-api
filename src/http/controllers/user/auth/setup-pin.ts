@@ -3,6 +3,33 @@ import { z } from 'zod'
 import { json } from '@/lib/json'
 import { makeFindUserUseCase } from '@/factories/user.factory'
 import { makeSetupPinUseCase } from '@/factories/pin.factory'
+import { successResponseSchema, genericErrorSchema } from '@/schemas/route-schemas'
+
+export const setupPinOpts = {
+  schema: {
+    tags: ['auth'],
+    description: 'Setup user PIN',
+    security: [{ bearerAuth: [] }],
+    body: {
+      type: 'object',
+      required: ['raw_pin'],
+      properties: {
+        raw_pin: {
+          type: 'string',
+          pattern: '^[0-9]{4}$',
+          description: '4-digit PIN'
+        }
+      }
+    },
+    response: {
+      200: successResponseSchema,
+      400: genericErrorSchema,
+      401: genericErrorSchema,
+      404: genericErrorSchema,
+      500: genericErrorSchema
+    }
+  }
+}
 
 export default async function setupPin(
   request: FastifyRequest,

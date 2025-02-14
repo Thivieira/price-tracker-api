@@ -126,3 +126,108 @@ export async function verifyOTP(request: FastifyRequest, reply: FastifyReply) {
     }))
   }
 }
+
+export const sendOTPOpts = {
+  schema: {
+    tags: ['auth'],
+    description: 'Send OTP verification code',
+    body: {
+      type: 'object',
+      required: ['phone'],
+      properties: {
+        phone: {
+          type: 'string',
+          description: 'Phone number in international format (e.g., +1234567890)'
+        }
+      }
+    },
+    response: {
+      200: {
+        type: 'object',
+        properties: {
+          success: { type: 'boolean' },
+          code: { type: 'string' },
+          message: { type: 'string' },
+          isNewPhone: { type: 'boolean' }
+        }
+      },
+      400: {
+        type: 'object',
+        properties: {
+          success: { type: 'boolean' },
+          code: { type: 'string' },
+          message: { type: 'string' },
+          errors: {
+            type: 'array',
+            items: {
+              type: 'object'
+            }
+          }
+        }
+      },
+      500: {
+        type: 'object',
+        properties: {
+          success: { type: 'boolean' },
+          code: { type: 'string' },
+          message: { type: 'string' }
+        }
+      }
+    }
+  }
+}
+
+export const verifyOTPOpts = {
+  schema: {
+    tags: ['auth'],
+    description: 'Verify OTP code',
+    body: {
+      type: 'object',
+      required: ['phone', 'otp'],
+      properties: {
+        phone: {
+          type: 'string',
+          description: 'Phone number in international format (e.g., +1234567890)'
+        },
+        otp: {
+          type: 'string',
+          pattern: '^[0-9]{4}$',
+          description: '4-digit OTP code'
+        }
+      }
+    },
+    response: {
+      200: {
+        type: 'object',
+        properties: {
+          success: { type: 'boolean' },
+          code: { type: 'string' },
+          message: { type: 'string' },
+          phone: { type: 'string' }
+        }
+      },
+      400: {
+        type: 'object',
+        properties: {
+          success: { type: 'boolean' },
+          code: { type: 'string' },
+          message: { type: 'string' },
+          errors: {
+            type: 'array',
+            items: {
+              type: 'object'
+            }
+          }
+        }
+      },
+      500: {
+        type: 'object',
+        properties: {
+          success: { type: 'boolean' },
+          code: { type: 'string' },
+          message: { type: 'string' }
+        }
+      }
+    }
+  }
+}

@@ -38,3 +38,45 @@ export default async function verifyPin(
     throw error
   }
 }
+
+export const verifyPinOpts = {
+  schema: {
+    tags: ['auth'],
+    description: 'Verify user PIN',
+    security: [{ bearerAuth: [] }],
+    body: {
+      type: 'object',
+      required: ['pin'],
+      properties: {
+        pin: {
+          type: 'string',
+          minLength: 4,
+          maxLength: 4,
+          pattern: '^[0-9]+$',
+          description: '4-digit PIN'
+        }
+      }
+    },
+    response: {
+      200: {
+        type: 'object',
+        properties: {
+          message: { type: 'string' }
+        }
+      },
+      400: {
+        type: 'object',
+        properties: {
+          message: { type: 'string' },
+          issues: { type: 'object' }
+        }
+      },
+      401: {
+        type: 'object',
+        properties: {
+          message: { type: 'string' }
+        }
+      }
+    }
+  }
+}

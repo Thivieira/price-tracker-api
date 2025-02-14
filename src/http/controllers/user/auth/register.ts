@@ -59,3 +59,38 @@ export default async function register(request: FastifyRequest, reply: FastifyRe
     refreshToken: login.refreshToken,
   })
 }
+
+export const registerOpts = {
+  schema: {
+    tags: ['auth'],
+    description: 'Register a new user',
+    body: {
+      type: 'object',
+      required: ['username', 'email', 'password', 'phone'],
+      properties: {
+        username: { type: 'string', description: 'Unique username' },
+        email: { type: 'string', format: 'email', description: 'Valid email address' },
+        password: { type: 'string', format: 'password', minLength: 8 },
+        phone: { type: 'string', description: 'Phone number with country code' }
+      }
+    },
+    response: {
+      201: {
+        type: 'object',
+        properties: {
+          message: { type: 'string' },
+          accessToken: { type: 'string' },
+          refreshToken: { type: 'string' }
+        }
+      },
+      400: {
+        type: 'object',
+        properties: {
+          success: { type: 'boolean' },
+          message: { type: 'string' },
+          errors: { type: 'object' }
+        }
+      }
+    }
+  }
+}

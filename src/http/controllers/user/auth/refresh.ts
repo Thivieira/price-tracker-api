@@ -28,3 +28,41 @@ export default async function refresh(request: FastifyRequest, reply: FastifyRep
     return reply.status(500).send({ error: 'Internal server error' })
   }
 }
+
+export const refreshOpts = {
+  schema: {
+    tags: ['auth'],
+    description: 'Refresh access token using refresh token',
+    body: {
+      type: 'object',
+      properties: {
+        refreshToken: { type: 'string', description: 'Valid refresh token' }
+      }
+    },
+    headers: {
+      type: 'object',
+      properties: {
+        authorization: {
+          type: 'string',
+          description: 'Bearer refresh_token',
+          pattern: '^Bearer '
+        }
+      }
+    },
+    response: {
+      200: {
+        type: 'object',
+        properties: {
+          accessToken: { type: 'string' },
+          refreshToken: { type: 'string' }
+        }
+      },
+      401: {
+        type: 'object',
+        properties: {
+          error: { type: 'string' }
+        }
+      }
+    }
+  }
+}

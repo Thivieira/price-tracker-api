@@ -3,6 +3,34 @@ import { updateProfileBodySchema } from '@/schemas/user.schema'
 import { makeUpdateUserProfileUseCase, makeFindUserUseCase } from '@/factories/user.factory'
 import { ZodError } from 'zod'
 import { json } from '@/lib/json'
+import { genericErrorSchema, successResponseSchema } from '@/schemas/route-schemas'
+import { errorResponses, successResponse } from '@/schemas/swagger-schemas'
+
+export const updateProfileOpts = {
+  schema: {
+    tags: ['users'],
+    description: 'Update user profile information',
+    security: [{ bearerAuth: [] }],
+    body: {
+      type: 'object',
+      properties: {
+        first_name: { type: 'string', minLength: 2 },
+        last_name: { type: 'string', minLength: 2 },
+        email: { type: 'string', format: 'email' },
+        phone: { type: 'string', minLength: 10 },
+        street_address: { type: 'string', minLength: 5 },
+        city: { type: 'string', minLength: 2 },
+        region: { type: 'string', minLength: 2 },
+        zip_code: { type: 'string', minLength: 5 },
+        unit_number: { type: 'string' }
+      }
+    },
+    response: {
+      200: successResponse,
+      ...errorResponses
+    }
+  }
+}
 
 export default async function updateProfile(
   request: FastifyRequest,

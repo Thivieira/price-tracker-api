@@ -3,6 +3,43 @@ import { z } from 'zod'
 import { makeUpdateUserProfileUseCase, makeFindUserUseCase } from '@/factories/user.factory'
 import bcrypt from 'bcrypt'
 import { json } from '@/lib/json'
+import { genericErrorSchema, successResponseSchema } from '@/schemas/route-schemas'
+
+export const updatePinOpts = {
+  schema: {
+    tags: ['users'],
+    description: 'Update user PIN',
+    security: [{ bearerAuth: [] }],
+    body: {
+      type: 'object',
+      required: ['current_pin', 'new_pin', 'confirm_new_pin'],
+      properties: {
+        current_pin: {
+          type: 'string',
+          pattern: '^[0-9]{4}$',
+          description: 'Current 4-digit PIN'
+        },
+        new_pin: {
+          type: 'string',
+          pattern: '^[0-9]{4}$',
+          description: 'New 4-digit PIN'
+        },
+        confirm_new_pin: {
+          type: 'string',
+          pattern: '^[0-9]{4}$',
+          description: 'Confirm new 4-digit PIN'
+        }
+      }
+    },
+    response: {
+      200: successResponseSchema,
+      400: genericErrorSchema,
+      401: genericErrorSchema,
+      404: genericErrorSchema,
+      500: genericErrorSchema
+    }
+  }
+}
 
 export default async function updatePin(
   request: FastifyRequest,
