@@ -12,28 +12,24 @@ export async function sendOTP(request: FastifyRequest, reply: FastifyReply) {
     })
 
     const { phone } = schema.parse(request.body)
-    const user = await makeFindUserUseCase().byPhone(phone)
+    const existingUser = await makeFindUserUseCase().byPhone(phone)
 
-    // For new phone numbers, create a temporary verification
-    if (!user) {
-      await makeOTPUseCase().generate(phone)
-
-      return reply.status(200).send(json({
-        success: true,
-        code: 'OTP_SENT_NEW',
-        message: 'Verification code sent successfully',
-        isNewPhone: true
+    // Reject if phone number is already registered
+    if (existingUser) {
+      return reply.status(400).send(json({
+        success: false,
+        code: 'PHONE_ALREADY_REGISTERED',
+        message: 'Phone number is already registered'
       }))
     }
 
-    // For existing users, verify their phone
-    await makeOTPUseCase().generate(phone, user.id)
+    // Generate OTP for new phone number
+    await makeOTPUseCase().generate(phone)
 
     return reply.status(200).send(json({
       success: true,
-      code: 'OTP_SENT_EXISTING',
-      message: 'Verification code sent successfully',
-      isNewPhone: false
+      code: 'OTP_SENT',
+      message: 'Verification code sent successfully'
     }))
   } catch (error) {
     console.error(error)
